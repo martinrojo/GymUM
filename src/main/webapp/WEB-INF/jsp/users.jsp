@@ -16,17 +16,17 @@
     <div class="row">
         <div class="span8 offset2">
             <h1>Users</h1>
-            <form:form method="post" action="add" commandName="user" class="form-horizontal">
+            <form:form method="post" action="add" modelAttribute="user" class="form-horizontal">
             <div class="control-group">
-                <form:label cssClass="control-label" path="firstName">First Name:</form:label>
+                <form:label cssClass="control-label" path="nombre">Nombre:</form:label>
                 <div class="controls">
-                    <form:input path="firstName"/>
+                    <form:input path="nombre"/>
                 </div>
             </div>
             <div class="control-group">
-                <form:label cssClass="control-label" path="lastName">Last Name:</form:label>
+                <form:label cssClass="control-label" path="apellido">Apellido:</form:label>
                 <div class="controls">
-                    <form:input path="lastName"/>
+                    <form:input path="apellido"/>
                 </div>
             </div>
             <div class="control-group">
@@ -48,7 +48,7 @@
                 </div>
             </div>
 
-            <c:if test="${!empty users}">
+            <c:if test="${!empty user}">
                 <h3>Users</h3>
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -62,7 +62,7 @@
                     <tbody>
                     <c:forEach items="${users}" var="user">
                         <tr>
-                            <td>${user.lastName}, ${user.firstName}</td>
+                            <td>${user.apellido}, ${user.nombre}</td>
                             <td>${user.email}</td>
                             <td>${user.dni}</td>
                             <td>

@@ -12,10 +12,10 @@ public class User {
     private Long id;
 
     @Basic
-    private String firstName;
+    private String nombre;
 
     @Basic
-    private String lastName;
+    private String apellido;
 
     @Basic
     private String dni;
@@ -34,21 +34,22 @@ public class User {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getNombre() {
+        return nombre;
     }
 
-    public void setFirstName(String name) {
-        this.firstName = name;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
+
     public String getDni() {
         return dni;
     }
