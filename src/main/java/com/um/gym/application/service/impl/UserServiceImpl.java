@@ -1,34 +1,34 @@
 package com.um.gym.application.service.impl;
 
-import com.um.gym.application.models.User;
+import com.um.gym.application.models.Usuario;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserServiceImpl extends ServiceImpl<User, Long> {
+public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
     @Override
-    public User create(User entity) {
+    public Usuario create(Usuario entity) {
         return super.create(entity);
     }
 
     @Override
-    public void delete(User entity) {
+    public void delete(Usuario entity) {
         super.delete(entity);
     }
 
     @Override
-    public User update(User entity) {
+    public Usuario update(Usuario entity) {
         return super.update(entity);
     }
 
     @Override
-    public User findById(Long aLong) {
+    public Usuario findById(Long aLong) {
         return super.findById(aLong);
     }
 
     @Override
-    public List<User> findAll() {
+    public List<Usuario> findAll() {
         return super.findAll();
     }
 

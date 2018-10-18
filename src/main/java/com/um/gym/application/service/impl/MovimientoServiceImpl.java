@@ -1,34 +1,34 @@
 package com.um.gym.application.service.impl;
 
-import com.um.gym.application.models.UserMovement;
+import com.um.gym.application.models.Movimiento;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserMovementServiceImpl extends ServiceImpl<UserMovement, Long> {
+public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
     @Override
-    public UserMovement create(UserMovement entity) {
+    public Movimiento create(Movimiento entity) {
         return super.create(entity);
     }
 
     @Override
-    public void delete(UserMovement entity) {
+    public void delete(Movimiento entity) {
         super.delete(entity);
     }
 
     @Override
-    public UserMovement update(UserMovement entity) {
+    public Movimiento update(Movimiento entity) {
         return super.update(entity);
     }
 
     @Override
-    public UserMovement findById(Long aLong) {
+    public Movimiento findById(Long aLong) {
         return super.findById(aLong);
     }
 
     @Override
-    public List<UserMovement> findAll() {
+    public List<Movimiento> findAll() {
         return super.findAll();
     }
 

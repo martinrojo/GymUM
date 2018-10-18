@@ -60,13 +60,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <c:forEach items="${users}" var="user">
+                    <c:forEach items="${users}" var="usuario">
                         <tr>
-                            <td>${user.apellido}, ${user.nombre}</td>
-                            <td>${user.email}</td>
-                            <td>${user.dni}</td>
+                            <td>${usuario.apellido}, ${usuario.nombre}</td>
+                            <td>${usuario.email}</td>
+                            <td>${usuario.dni}</td>
                             <td>
-                                <form action="delete/${user.id}" method="post"><input type="submit"
+                                <form action="delete/${usuario.id}" method="post"><input type="submit"
                                                                                       class="btn btn-danger btn-mini"
                                                                                       value="Delete"/></form>
                             </td>
