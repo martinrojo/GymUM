@@ -1,12 +1,9 @@
 package com.um.gym.application.controllers;
 
 import com.um.gym.application.models.User;
-import com.um.gym.application.repository.UserRepository;
 import com.um.gym.application.service.impl.UserServiceImpl;
-import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
-import org.hibernate.*;
+
 
 @Controller
 public class UserController {
@@ -36,14 +33,15 @@ public class UserController {
         return "redirect:/";
     }
 
-    @RequestMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userId) {
-
-        userServiceImpl.delete(userServiceImpl.findById(userId));
-
-        return "redirect:/";
+    @DeleteMapping("/usuarios/{idUser}")
+    public ResponseEntity deleteUser(@PathVariable("idUser") Long idUser) {
+        try {
+            userServiceImpl.deleteById(idUser);
+            return ResponseEntity.ok().body("Usuario borrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
-
 
     @GetMapping("/api/users")
     public ResponseEntity listUsersJson(ModelMap model) throws JSONException {
@@ -53,17 +51,39 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
                 return ResponseEntity.ok().body(userServiceImpl.findAll());
-            /*for (User user : userRepository.findAll()) {
-
-                JSONObject userJSON = new JSONObject();
-                userJSON.put("id", user.getId());
-                userJSON.put("nombre", user.getNombre());
-                userJSON.put("apellido", user.getApellido());
-                userJSON.put("dni", user.getDni());
-                userJSON.put("email", user.getEmail());
-                userArray.put(userJSON);
-                return ResponseEntity.ok().body(userArray.toString());*/
             }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuarios/{idUser}")
+    public ResponseEntity findUser(@PathVariable("idUser") Long idUser) throws JSONException {
+        try {
+            if (userServiceImpl.findById(idUser).getEmail() == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario no encontrado");
+            } else {
+                return ResponseEntity.ok().body(userServiceImpl.findById(idUser));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/usuarios/{idUser}")
+    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser, @ModelAttribute("user") User user) throws JSONException {
+        try {
+            user.setId(idUser);
+            return ResponseEntity.ok().body(userServiceImpl.create(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuarios/{idUser}/movimientos")
+    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
+        try {
+            return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovements());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

@@ -1,11 +1,14 @@
 package com.um.gym.application.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -66,6 +69,14 @@ public class User {
         this.email = email;
     }
 
-    @OneToMany(mappedBy="user")
+    public Set<UserMovement> getMovements() {
+        return movements;
+    }
+
+    public void setMovements(Set<UserMovement> movements) {
+        this.movements = movements;
+    }
+
+    @OneToMany(mappedBy = "user")
     private Set<UserMovement> movements;
 }
