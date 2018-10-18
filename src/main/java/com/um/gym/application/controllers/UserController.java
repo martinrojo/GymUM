@@ -2,6 +2,7 @@ package com.um.gym.application.controllers;
 
 import com.um.gym.application.models.User;
 import com.um.gym.application.repository.UserRepository;
+import com.um.gym.application.service.impl.UserServiceImpl;
 import org.hibernate.SessionFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,19 +19,19 @@ import org.hibernate.*;
 @Controller
 public class UserController {
     @Autowired
-    private UserRepository userRepository;
+    private UserServiceImpl userServiceImpl;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
         model.addAttribute("user", new User());
-        model.addAttribute("users", userRepository.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
+        model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
         return "users";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") User user, BindingResult result) {
 
-        userRepository.save(user);
+        userServiceImpl.create(user);
 
         return "redirect:/";
     }
@@ -38,7 +39,7 @@ public class UserController {
     @RequestMapping("/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId) {
 
-        userRepository.delete(userRepository.getOne(userId));
+        userServiceImpl.delete(userServiceImpl.findById(userId));
 
         return "redirect:/";
     }
@@ -48,10 +49,10 @@ public class UserController {
     public ResponseEntity listUsersJson(ModelMap model) throws JSONException {
         try {
             JSONArray userArray = new JSONArray();
-            if (userRepository.findAll().isEmpty()) {
+            if (userServiceImpl.findAll().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
-                return ResponseEntity.ok().body(userRepository.findAll());
+                return ResponseEntity.ok().body(userServiceImpl.findAll());
             /*for (User user : userRepository.findAll()) {
 
                 JSONObject userJSON = new JSONObject();
