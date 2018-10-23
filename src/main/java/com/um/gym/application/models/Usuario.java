@@ -2,11 +2,12 @@ package com.um.gym.application.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
