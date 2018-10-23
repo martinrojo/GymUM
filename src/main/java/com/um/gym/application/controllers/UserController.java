@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
+
 @Controller
 public class UserController {
     @Autowired
@@ -20,26 +21,27 @@ public class UserController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
         model.addAttribute("user", new Usuario());
-        model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.Usuario.class).list()*/);
+        model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
         return "users";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("user") Usuario usuario, BindingResult result) {
+    public String addUser(@ModelAttribute("user") Usuario user, BindingResult result) {
 
-        userServiceImpl.create(usuario);
-
-        return "redirect:/";
-    }
-
-    @RequestMapping("/delete/{userId}")
-    public String deleteUser(@PathVariable("userId") Long userId) {
-
-        userServiceImpl.delete(userServiceImpl.findById(userId));
+        userServiceImpl.create(user);
 
         return "redirect:/";
     }
 
+    @DeleteMapping("/usuarios/{idUser}")
+    public ResponseEntity deleteUser(@PathVariable("idUser") Long idUser) {
+        try {
+            userServiceImpl.deleteById(idUser);
+            return ResponseEntity.ok().body("Usuario borrado");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
 
     @GetMapping("/api/users")
     public ResponseEntity listUsersJson(ModelMap model) throws JSONException {
@@ -49,19 +51,41 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
                 return ResponseEntity.ok().body(userServiceImpl.findAll());
-            /*for (Usuario usuario : userRepository.findAll()) {
-
-                JSONObject userJSON = new JSONObject();
-                userJSON.put("id", usuario.getId());
-                userJSON.put("nombre", usuario.getNombre());
-                userJSON.put("apellido", usuario.getApellido());
-                userJSON.put("dni", usuario.getDni());
-                userJSON.put("email", usuario.getEmail());
-                userArray.put(userJSON);
-                return ResponseEntity.ok().body(userArray.toString());*/
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuarios/{idUser}")
+    public ResponseEntity findUser(@PathVariable("idUser") Long idUser) throws JSONException {
+        try {
+            if (userServiceImpl.findById(idUser).getEmail() == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario no encontrado");
+            } else {
+                return ResponseEntity.ok().body(userServiceImpl.findById(idUser));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/usuarios/{idUser}")
+    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser, @ModelAttribute("user") Usuario user) throws JSONException {
+        try {
+            user.setId(idUser);
+            return ResponseEntity.ok().body(userServiceImpl.create(user));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/usuarios/{idUser}/movimientos")
+    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
+        try {
+            return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovimientos());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }
     }
 }
