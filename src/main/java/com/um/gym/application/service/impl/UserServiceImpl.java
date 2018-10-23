@@ -1,12 +1,18 @@
 package com.um.gym.application.service.impl;
 
 import com.um.gym.application.models.Usuario;
+import com.um.gym.application.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public Usuario create(Usuario entity) {
         return super.create(entity);
@@ -35,5 +41,9 @@ public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
     @Override
     public void deleteById(Long aLong) {
         super.deleteById(aLong);
+    }
+
+    public List<Usuario> findAllByDni(String dni){
+        return userRepository.findAllByDni(dni);
     }
 }
