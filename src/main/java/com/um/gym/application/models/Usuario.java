@@ -71,6 +71,14 @@ public class Usuario {
         this.email = email;
     }
 
+    public Set<Movimiento> getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(Set<Movimiento> movimientos) {
+        this.movimientos = movimientos;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

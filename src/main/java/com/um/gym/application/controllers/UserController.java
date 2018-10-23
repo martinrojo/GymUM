@@ -1,6 +1,6 @@
 package com.um.gym.application.controllers;
 
-import com.um.gym.application.models.User;
+import com.um.gym.application.models.Usuario;
 import com.um.gym.application.service.impl.UserServiceImpl;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,13 +20,13 @@ public class UserController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new Usuario());
         model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
         return "users";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("user") User user, BindingResult result) {
+    public String addUser(@ModelAttribute("user") Usuario user, BindingResult result) {
 
         userServiceImpl.create(user);
 
@@ -71,7 +71,7 @@ public class UserController {
     }
 
     @PutMapping("/usuarios/{idUser}")
-    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser, @ModelAttribute("user") User user) throws JSONException {
+    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser, @ModelAttribute("user") Usuario user) throws JSONException {
         try {
             user.setId(idUser);
             return ResponseEntity.ok().body(userServiceImpl.create(user));
@@ -83,7 +83,7 @@ public class UserController {
     @GetMapping("/usuarios/{idUser}/movimientos")
     public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
         try {
-            return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovements());
+            return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovimientos());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }
