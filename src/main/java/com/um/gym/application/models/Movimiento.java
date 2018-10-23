@@ -4,25 +4,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "movimiento_usuario")
-public class Movimiento {
+@Table(name = "movimiento")
+public class Movimiento  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    //@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "yy/MM/dd")
+    @JsonFormat(pattern = "yy/MM/dd")
     @Column(name = "fecha_entrada")
     private Date fechaEntrada;
+
     @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    //@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "yy/MM/dd")
+    @JsonFormat(pattern = "yy/MM/dd")
     @Column(name = "fecha_salida")
     private Date fechaSalida;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private Usuario usuario;
@@ -55,7 +63,7 @@ public class Movimiento {
         return usuario;
     }
 
-    public void setUser(Usuario usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 

@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 
 
 @Controller
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
