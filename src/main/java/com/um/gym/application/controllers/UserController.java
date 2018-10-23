@@ -66,7 +66,7 @@ public class UserController {
                 return ResponseEntity.ok().body(userServiceImpl.findById(idUser));
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class UserController {
         try {
             return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovements());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }
     }
 }
