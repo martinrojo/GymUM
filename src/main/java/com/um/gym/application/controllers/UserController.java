@@ -13,26 +13,26 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
         model.addAttribute("user", new Usuario());
-        model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
+        model.addAttribute("users", userServiceImpl.findAll() /* session.createCriteria(com.springapp.mvc.User.class).list());
         return "users";
-    }
+    }*/
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    /*@RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") Usuario user, BindingResult result) {
 
         userServiceImpl.create(user);
 
         return "redirect:/";
-    }
+    }*/
 
     @DeleteMapping("/usuarios/{idUser}")
     public ResponseEntity deleteUser(@PathVariable("idUser") Long idUser) {
@@ -44,10 +44,25 @@ public class UserController {
         }
     }
 
-    @GetMapping("/api/users")
-    public ResponseEntity listUsersJson(ModelMap model) throws JSONException {
+    @GetMapping("/usuarios")
+    public ResponseEntity listUsers(String nombre, String dni) throws JSONException {
         try {
-            JSONArray userArray = new JSONArray();
+            if(dni!=null){
+                if(userServiceImpl.findAllByDni(dni).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el DNI:" + dni);
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByDni(dni));
+                }
+            }
+
+            if(nombre!=null){
+                if(userServiceImpl.findAllByNombreAndApellido(nombre).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre o Apellido:" + nombre);
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByNombreAndApellido(nombre));
+                }
+            }
+
             if (userServiceImpl.findAll().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
@@ -71,11 +86,15 @@ public class UserController {
         }
     }
 
-    @PutMapping("/usuarios/{idUser}")
-    public ResponseEntity insertUser(@PathVariable("idUser") Long idUser, @ModelAttribute("user") Usuario user) throws JSONException {
+    @PutMapping("/usuarios/")
+    public ResponseEntity insertUser(@RequestBody Usuario user) throws JSONException {
         try {
-            user.setId(idUser);
-            return ResponseEntity.ok().body(userServiceImpl.create(user));
+            if(user.getId()!=0){
+                return ResponseEntity.ok().body(userServiceImpl.update(user));
+            }
+            else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(userServiceImpl.create(user));
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

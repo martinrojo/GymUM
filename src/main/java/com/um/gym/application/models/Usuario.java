@@ -1,5 +1,7 @@
 package com.um.gym.application.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.io.Serializable;
@@ -26,6 +28,7 @@ public class Usuario  {
     @Email(message = "Ingrese un email correcto.")
     private String email;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private Set<Movimiento> movimientos;
 
