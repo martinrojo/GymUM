@@ -19,12 +19,12 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    /*@RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
         model.addAttribute("user", new Usuario());
-        model.addAttribute("users", userServiceImpl.findAll()/* session.createCriteria(com.springapp.mvc.User.class).list()*/);
+        model.addAttribute("users", userServiceImpl.findAll() /* session.createCriteria(com.springapp.mvc.User.class).list());
         return "users";
-    }
+    }*/
 
     /*@RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute("user") Usuario user, BindingResult result) {
@@ -45,9 +45,33 @@ public class UserController {
     }
 
     @GetMapping("/usuarios")
-    public ResponseEntity listUsersJson(String nombre, String apellido, String dni) throws JSONException {
+    public ResponseEntity listUsers(String nombre, String apellido, String dni) throws JSONException {
         try {
-            JSONArray userArray = new JSONArray();
+            /*JSONArray userArray = new JSONArray();*/
+            if(dni!=null){
+                if(userServiceImpl.findAllByDni(dni).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el DNI:" + dni);
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByDni(dni));
+                }
+            }
+
+            if(nombre!=null){
+                if(userServiceImpl.findAllByNombre(nombre).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre:" + nombre);
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByNombre(nombre));
+                }
+            }
+
+            if(apellido!=null){
+                if(userServiceImpl.findAllByApellido(apellido).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Apellido:" + apellido);
+                }else{
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByApellido(apellido));
+                }
+            }
+
             if (userServiceImpl.findAll().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
