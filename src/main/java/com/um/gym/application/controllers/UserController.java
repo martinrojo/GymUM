@@ -45,9 +45,8 @@ public class UserController {
     }
 
     @GetMapping("/usuarios")
-    public ResponseEntity listUsers(String nombre, String apellido, String dni) throws JSONException {
+    public ResponseEntity listUsers(String nombre, String dni) throws JSONException {
         try {
-            /*JSONArray userArray = new JSONArray();*/
             if(dni!=null){
                 if(userServiceImpl.findAllByDni(dni).isEmpty()){
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el DNI:" + dni);
@@ -57,18 +56,10 @@ public class UserController {
             }
 
             if(nombre!=null){
-                if(userServiceImpl.findAllByNombre(nombre).isEmpty()){
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre:" + nombre);
+                if(userServiceImpl.findAllByNombreAndApellido(nombre).isEmpty()){
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre o Apellido:" + nombre);
                 }else{
-                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByNombre(nombre));
-                }
-            }
-
-            if(apellido!=null){
-                if(userServiceImpl.findAllByApellido(apellido).isEmpty()){
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Apellido:" + apellido);
-                }else{
-                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByApellido(apellido));
+                    return ResponseEntity.status(HttpStatus.OK).body(userServiceImpl.findAllByNombreAndApellido(nombre));
                 }
             }
 
