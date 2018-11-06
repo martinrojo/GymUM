@@ -4,6 +4,7 @@ import com.um.gym.application.models.Movimiento;
 import com.um.gym.application.models.Usuario;
 import com.um.gym.application.service.impl.MovimientoServiceImpl;
 import com.um.gym.application.service.impl.UserServiceImpl;
+import com.um.gym.application.utils.JsonMovimientoController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +22,18 @@ public class MovimientoController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private JsonMovimientoController jsonMovimientoController;
+
     @GetMapping("/movimientos")
     public ResponseEntity findAll() {
         try {
-            if (movimientoServiceImpl.findAll() == null) {
+            if (movimientoServiceImpl.findAll().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No hay movimientos.");
             } else {
-                return ResponseEntity.status(HttpStatus.OK).body(movimientoServiceImpl.findAll());
+                List<Movimiento> lista = movimientoServiceImpl.findAll();
+                String json = jsonMovimientoController.getList(lista);
+                return ResponseEntity.status(HttpStatus.OK).body(json);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -36,8 +42,16 @@ public class MovimientoController {
 
     @GetMapping("/movimientos/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(movimientoServiceImpl.findByUsuario(id));
-
+        if (movimientoServiceImpl.findByUsuario(id).isEmpty()){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No hay movimientos.");
+        }
+        try {
+            List<Movimiento> lista = movimientoServiceImpl.findByUsuario(id);
+            String json = jsonMovimientoController.getList(lista);
+            return ResponseEntity.status(HttpStatus.OK).body(json);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PostMapping("/movimientos/")
@@ -66,5 +80,4 @@ public class MovimientoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
-
 }
