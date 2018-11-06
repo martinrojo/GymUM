@@ -20,7 +20,7 @@ public class JsonUsuarioController {
                 u.put("nombre", usuario.getNombre());
                 u.put("apellido", usuario.getApellido());
                 u.put("nombre", usuario.getDni());
-                u.put("nombre", usuario.getEmail());
+                u.put("email", usuario.getEmail());
                 jsonArray.put(u);
             }
         JSONObject mainObj = new JSONObject();
@@ -36,7 +36,7 @@ public class JsonUsuarioController {
         u.put("nombre", usuario.getNombre());
         u.put("apellido", usuario.getApellido());
         u.put("nombre", usuario.getDni());
-        u.put("nombre", usuario.getEmail());
+        u.put("email", usuario.getEmail());
         jsonArray.put(u);
         mainObj.put("usuario", jsonArray);
         logger.info(mainObj.toString());
