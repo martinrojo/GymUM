@@ -16,18 +16,14 @@ public class Movimiento  {
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    //@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @DateTimeFormat(pattern = "yy/MM/dd")
-    @JsonFormat(pattern = "yy/MM/dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "fecha_entrada")
     private Date fechaEntrada;
 
     @Temporal(TemporalType.TIMESTAMP)
-    //@DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    //@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @DateTimeFormat(pattern = "yy/MM/dd")
-    @JsonFormat(pattern = "yy/MM/dd")
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     @Column(name = "fecha_salida")
     private Date fechaSalida;
 
