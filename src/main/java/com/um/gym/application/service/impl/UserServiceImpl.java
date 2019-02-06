@@ -15,6 +15,8 @@ public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
 
     @Override
     public Usuario create(Usuario entity) {
+        entity.setHoras(0);
+        entity.setMinutos(0);
         return super.create(entity);
     }
 
@@ -48,9 +50,5 @@ public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
     }
     public List<Usuario> findAllByNombreAndApellido(String nombre) {
         return userRepository.findAllByNombreAndApellido(nombre);
-    }
-
-    public Usuario findByDni(String dni){
-        return userRepository.findByDni(dni);
     }
 }

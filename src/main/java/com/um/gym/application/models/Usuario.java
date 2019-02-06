@@ -28,6 +28,12 @@ public class Usuario  {
     @Email(message = "Ingrese un email correcto.")
     private String email;
 
+    @Column(name = "horas")
+    private Integer horas;
+
+    @Column(name = "minutos")
+    private Integer minutos;
+
     @JsonIgnore
     @OneToMany(mappedBy = "usuario")
     private Set<Movimiento> movimientos;
@@ -81,6 +87,22 @@ public class Usuario  {
 
     public void setMovimientos(Set<Movimiento> movimientos) {
         this.movimientos = movimientos;
+    }
+
+    public Integer getHoras() {
+        return horas;
+    }
+
+    public void setHoras(Integer horas) {
+        this.horas = horas;
+    }
+
+    public Integer getMinutos() {
+        return minutos;
+    }
+
+    public void setMinutos(Integer minutos) {
+        this.minutos = minutos;
     }
 
     @Override
