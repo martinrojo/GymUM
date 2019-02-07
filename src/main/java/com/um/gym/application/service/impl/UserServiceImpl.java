@@ -49,4 +49,8 @@ public class UserServiceImpl extends ServiceImpl<Usuario, Long> {
     public List<Usuario> findAllByNombreAndApellido(String nombre) {
         return userRepository.findAllByNombreAndApellido(nombre);
     }
+
+    public Usuario findByDni(String dni){
+        return userRepository.findByDni(dni);
+    }
 }
