@@ -7,6 +7,7 @@ import com.um.gym.application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -30,6 +31,38 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
 
     @Override
     public Movimiento update(Movimiento entity) {
+        Date fechaMenor = entity.getFechaEntrada();
+        Date fechaMayor = entity.getFechaSalida();
+
+
+        //los milisegundos
+        long diferenciaMils = fechaMayor.getTime() - fechaMenor.getTime();
+        //obtenemos los segundos
+        long segundos = diferenciaMils / 1000;
+        //obtenemos las horas
+        long horas = segundos / 3600;
+        //restamos las horas para continuar con minutos
+        segundos -= horas*3600;
+        //igual que el paso anterior
+        long minutos = segundos /60;
+        segundos -= minutos*60;
+
+        Integer h = (int) (long) horas;
+        Integer m = (int) (long) minutos;
+
+        Usuario usuario = userService.findById(entity.getUsuario().getId());
+
+
+        if (usuario.getMinutos() + m >= 60){
+            Integer m2 = (usuario.getMinutos() + m) - 60;
+            usuario.setHoras(usuario.getHoras() + h + 1) ;
+            usuario.setMinutos(m2);
+        } else {
+            usuario.setHoras(usuario.getHoras() + h);
+            usuario.setMinutos(usuario.getMinutos() + m);
+        }
+
+        userService.update(usuario);
         return super.update(entity);
     }
 
@@ -51,4 +84,6 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
     public List<Movimiento> findByUsuario(Long id){
         return dao.findAllByUsuario(userService.findById(id));
     }
+
+
 }

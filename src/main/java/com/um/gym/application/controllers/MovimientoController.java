@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -70,6 +71,12 @@ public class MovimientoController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
+
+    @PutMapping("/movimientos/{id}")
+    public ResponseEntity edit(@RequestBody Movimiento movimiento){
+        return ResponseEntity.status(HttpStatus.OK).body(movimientoServiceImpl.update(movimiento));
+    }
+
 
     @DeleteMapping("/movimientos/{id}")
     public ResponseEntity delete(@PathVariable Long id){
