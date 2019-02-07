@@ -1,19 +1,13 @@
 package com.um.gym.application.controllers;
 
-import com.um.gym.application.Application;
-import com.um.gym.application.models.Usuario;
-import com.um.gym.application.service.impl.UserServiceImpl;
+import com.um.gym.application.models.Persona;
+import com.um.gym.application.service.impl.PersonaServiceImpl;
 import com.um.gym.application.utils.JsonUsuarioController;
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -21,59 +15,59 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
-public class UserController {
+@RequestMapping("/api/personas")
+public class PersonaController {
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private PersonaServiceImpl personaService;
 
     @Autowired
     private JsonUsuarioController jsonUsuarioController;
 
 
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PersonaController.class);
 
     /*@RequestMapping(value = "/", method = RequestMethod.GET)
     public String listUsers(ModelMap model) {
-        model.addAttribute("user", new Usuario());
-        model.addAttribute("users", userServiceImpl.findAll() /* session.createCriteria(com.springapp.mvc.User.class).list());
+        model.addAttribute("user", new Persona());
+        model.addAttribute("users", personaService.findAll() /* session.createCriteria(com.springapp.mvc.User.class).list());
         return "users";
     }*/
 
     /*@RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute("user") Usuario user, BindingResult result) {
+    public String addUser(@ModelAttribute("user") Persona user, BindingResult result) {
 
-        userServiceImpl.create(user);
+        personaService.create(user);
 
         return "redirect:/";
     }*/
 
-    @GetMapping("/usuarios")
+    @GetMapping
     public ResponseEntity listUsers(String nombre, String dni) throws JSONException {
         try {
             if (dni != null) {
-                if (userServiceImpl.findAllByDni(dni).isEmpty()) {
+                if (personaService.findAllByDni(dni).isEmpty()) {
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el DNI:" + dni);
                 } else {
-                    List<Usuario> listaU = userServiceImpl.findAllByDni(dni);
+                    List<Persona> listaU = personaService.findAllByDni(dni);
                     String json = jsonUsuarioController.getList(listaU);
                     return ResponseEntity.status(HttpStatus.OK).body(json);
                 }
             }
 
             if (nombre != null) {
-                if (userServiceImpl.findAllByNombreAndApellido(nombre).isEmpty()) {
+                if (personaService.findAllByNombreAndApellido(nombre).isEmpty()) {
                     return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre o Apellido:" + nombre);
                 } else {
-                    List<Usuario> listaU = userServiceImpl.findAllByNombreAndApellido(nombre);
+                    List<Persona> listaU = personaService.findAllByNombreAndApellido(nombre);
                     String json = jsonUsuarioController.getList(listaU);
                     return ResponseEntity.status(HttpStatus.OK).body(json);
                 }
             }
 
-            if (userServiceImpl.findAll().isEmpty()) {
+            if (personaService.findAll().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay datos");
             } else {
-                List<Usuario> listaU = userServiceImpl.findAll();
+                List<Persona> listaU = personaService.findAll();
                 String json = jsonUsuarioController.getList(listaU);
                 return ResponseEntity.status(HttpStatus.OK).body(json);
             }
@@ -82,14 +76,14 @@ public class UserController {
         }
     }
 
-    @GetMapping("/usuarios/{idUser}")
+    @GetMapping("/{idUser}")
     public ResponseEntity findUser(@PathVariable("idUser") Long idUser) throws JSONException {
         try {
-            if (userServiceImpl.findById(idUser).getEmail() == null) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Usuario no encontrado");
+            if (personaService.findById(idUser).getEmail() == null) {
+                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Persona no encontrado");
             } else {
-                Usuario usuario = userServiceImpl.findById(idUser);
-                String json = jsonUsuarioController.getObj(usuario);
+                Persona persona = personaService.findById(idUser);
+                String json = jsonUsuarioController.getObj(persona);
                 return ResponseEntity.status(HttpStatus.OK).body(json);
             }
         } catch (Exception e) {
@@ -97,46 +91,46 @@ public class UserController {
         }
     }
 
-    @GetMapping("/usuarios/{idUser}/movimientos")
+    @GetMapping("/{idUser}/movimientos")
     public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
         try {
-            return ResponseEntity.ok().body(userServiceImpl.findById(idUser).getMovimientos());
+            return ResponseEntity.ok().body(personaService.findById(idUser).getMovimientos());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
         }
     }
 
-    @PostMapping("/usuarios/")
-    public ResponseEntity create(@RequestBody Usuario user){
+    @PostMapping
+    public ResponseEntity create(@RequestBody Persona user) {
         try {
-            if (userServiceImpl.findByDni(user.getDni()) == null) {
-                return ResponseEntity.ok().body(userServiceImpl.create(user));
+            if (personaService.findByDni(user.getDni()) == null) {
+                return ResponseEntity.ok().body(personaService.create(user));
             } else {
-                return ResponseEntity.status(HttpStatus.CREATED).body(userServiceImpl.create(user));
+                return ResponseEntity.status(HttpStatus.CREATED).body(personaService.create(user));
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @PutMapping("/usuarios/")
-    public ResponseEntity insertUser(@RequestBody Usuario user) throws JSONException {
+    @PutMapping
+    public ResponseEntity insertUser(@RequestBody Persona user) throws JSONException {
         try {
-            if (userServiceImpl.findById(user.getId()) != null){
-                return ResponseEntity.ok().body(userServiceImpl.update(user));
-            }else{
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no existente.");
+            if (personaService.findById(user.getId()) != null) {
+                return ResponseEntity.ok().body(personaService.update(user));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Persona no existente.");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
-    @DeleteMapping("/usuarios/{idUser}")
+    @DeleteMapping("/{idUser}")
     public ResponseEntity deleteUser(@PathVariable("idUser") Long idUser) {
         try {
-            userServiceImpl.deleteById(idUser);
-            return ResponseEntity.ok().body("Usuario borrado");
+            personaService.deleteById(idUser);
+            return ResponseEntity.ok().body("Persona borrado");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }

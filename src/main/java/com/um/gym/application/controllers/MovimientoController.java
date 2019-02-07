@@ -1,9 +1,7 @@
 package com.um.gym.application.controllers;
 
 import com.um.gym.application.models.Movimiento;
-import com.um.gym.application.models.Usuario;
 import com.um.gym.application.service.impl.MovimientoServiceImpl;
-import com.um.gym.application.service.impl.UserServiceImpl;
 import com.um.gym.application.utils.JsonMovimientoController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -19,9 +16,6 @@ import java.util.List;
 public class MovimientoController {
     @Autowired
     private MovimientoServiceImpl movimientoServiceImpl;
-
-    @Autowired
-    private UserServiceImpl userService;
 
     @Autowired
     private JsonMovimientoController jsonMovimientoController;
@@ -57,11 +51,11 @@ public class MovimientoController {
 
     @PostMapping("/movimientos/")
     public ResponseEntity create(@RequestBody Movimiento movimiento, BindingResult result) {
-        List<Movimiento> movimientos = movimientoServiceImpl.findByUsuario(movimiento.getUsuario().getId());
+        List<Movimiento> movimientos = movimientoServiceImpl.findByUsuario(movimiento.getPersona().getId());
         if (movimientos != null) {
             for (Movimiento m : movimientos) {
                 if (m.getFechaSalida() == null) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hay un movimiento sin terminar para el usuario " + movimiento.getUsuario().getId());
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hay un movimiento sin terminar para el usuario " + movimiento.getPersona().getId());
                 }
             }
         }

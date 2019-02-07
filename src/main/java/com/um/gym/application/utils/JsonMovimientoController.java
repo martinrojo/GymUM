@@ -1,7 +1,6 @@
 package com.um.gym.application.utils;
 
 import com.um.gym.application.models.Movimiento;
-import com.um.gym.application.models.Usuario;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -18,7 +17,7 @@ public class JsonMovimientoController {
         JSONArray jsonArray = new JSONArray();
         for (Movimiento movimiento : lista) {
             JSONObject m = new JSONObject();
-            m.put("usuario", movimiento.getUsuario());
+            m.put("usuario", movimiento.getPersona());
             m.put("fecha_entrada", movimiento.getFechaEntrada());
             m.put("fecha_salida", movimiento.getFechaSalida());
             jsonArray.put(m);
@@ -33,7 +32,7 @@ public class JsonMovimientoController {
         JSONArray jsonArray = new JSONArray();
         JSONObject m = new JSONObject();
         JSONObject mainObj = new JSONObject();
-        m.put("usuario", movimiento.getUsuario());
+        m.put("usuario", movimiento.getPersona());
         m.put("fecha_entrada", movimiento.getFechaEntrada());
         m.put("fecha_salida", movimiento.getFechaSalida());
         jsonArray.put(m);

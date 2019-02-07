@@ -1,7 +1,6 @@
 package com.um.gym.application.utils;
 
-import com.um.gym.application.controllers.UserController;
-import com.um.gym.application.models.Usuario;
+import com.um.gym.application.models.Persona;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -13,14 +12,14 @@ import java.util.List;
 public class JsonUsuarioController {
     private static final Logger logger = LoggerFactory.getLogger(JsonUsuarioController.class);
 
-    public String getList(List<Usuario> lista){
+    public String getList(List<Persona> lista){
         JSONArray jsonArray = new JSONArray();
-        for (Usuario usuario : lista) {
+        for (Persona persona : lista) {
                 JSONObject u = new JSONObject();
-                u.put("nombre", usuario.getNombre());
-                u.put("apellido", usuario.getApellido());
-                u.put("dni", usuario.getDni());
-                u.put("email", usuario.getEmail());
+                u.put("nombre", persona.getNombre());
+                u.put("apellido", persona.getApellido());
+                u.put("dni", persona.getDni());
+                u.put("email", persona.getEmail());
                 jsonArray.put(u);
             }
         JSONObject mainObj = new JSONObject();
@@ -29,16 +28,16 @@ public class JsonUsuarioController {
         return mainObj.toString();
     }
 
-    public String getObj(Usuario usuario) {
+    public String getObj(Persona persona) {
         JSONArray jsonArray = new JSONArray();
         JSONObject u = new JSONObject();
         JSONObject mainObj = new JSONObject();
-        u.put("nombre", usuario.getNombre());
-        u.put("apellido", usuario.getApellido());
-        u.put("dni", usuario.getDni());
-        u.put("email", usuario.getEmail());
+        u.put("nombre", persona.getNombre());
+        u.put("apellido", persona.getApellido());
+        u.put("dni", persona.getDni());
+        u.put("email", persona.getEmail());
         jsonArray.put(u);
-        mainObj.put("usuario", jsonArray);
+        mainObj.put("persona", jsonArray);
         logger.info(mainObj.toString());
         return mainObj.toString();
     }

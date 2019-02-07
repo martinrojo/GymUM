@@ -4,12 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.io.Serializable;
 import java.util.*;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario  {
+public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -35,10 +34,10 @@ public class Usuario  {
     private Integer minutos;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "persona")
     private Set<Movimiento> movimientos;
 
-    public Usuario() {
+    public Persona() {
     }
 
     public Long getId() {
@@ -109,13 +108,13 @@ public class Usuario  {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) &&
-                Objects.equals(nombre, usuario.nombre) &&
-                Objects.equals(apellido, usuario.apellido) &&
-                Objects.equals(dni, usuario.dni) &&
-                Objects.equals(email, usuario.email) &&
-                Objects.equals(movimientos, usuario.movimientos);
+        Persona persona = (Persona) o;
+        return Objects.equals(id, persona.id) &&
+                Objects.equals(nombre, persona.nombre) &&
+                Objects.equals(apellido, persona.apellido) &&
+                Objects.equals(dni, persona.dni) &&
+                Objects.equals(email, persona.email) &&
+                Objects.equals(movimientos, persona.movimientos);
     }
 
     @Override
@@ -125,7 +124,7 @@ public class Usuario  {
 
     @Override
     public String toString() {
-        return "Usuario{" +
+        return "Persona{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
