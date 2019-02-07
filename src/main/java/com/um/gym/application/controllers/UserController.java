@@ -106,13 +106,26 @@ public class UserController {
         }
     }
 
+    @PostMapping("/usuarios/")
+    public ResponseEntity create(@RequestBody Usuario user){
+        try {
+            if (userServiceImpl.findByDni(user.getDni()) == null) {
+                return ResponseEntity.ok().body(userServiceImpl.create(user));
+            } else {
+                return ResponseEntity.status(HttpStatus.CREATED).body(userServiceImpl.create(user));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+    }
+
     @PutMapping("/usuarios/")
     public ResponseEntity insertUser(@RequestBody Usuario user) throws JSONException {
         try {
-            if (user.getId() != 0) {
+            if (userServiceImpl.findById(user.getId()) != null){
                 return ResponseEntity.ok().body(userServiceImpl.update(user));
-            } else {
-                return ResponseEntity.status(HttpStatus.CREATED).body(userServiceImpl.create(user));
+            }else{
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no existente.");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

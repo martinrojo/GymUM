@@ -12,6 +12,8 @@ public interface UserRepository extends JpaRepository<Usuario, Long> {
 
     List<Usuario> findAllByDni(String dni);
 
+    Usuario findByDni(String dni);
+
     @Query("SELECT u FROM Usuario u WHERE CONCAT(u.nombre, ' ', u.apellido) LIKE CONCAT('%',:name,'%')")
     List<Usuario> findAllByNombreAndApellido(@Param("name") String name);
 
