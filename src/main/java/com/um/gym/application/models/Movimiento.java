@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -28,8 +27,8 @@ public class Movimiento  {
     private Date fechaSalida;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private Usuario usuario;
+    @JoinColumn(name = "persona_id", nullable = false)
+    private Persona persona;
 
     public Long getId() {
         return id;
@@ -55,12 +54,12 @@ public class Movimiento  {
         this.fechaSalida = fechaSalida;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Persona getPersona() {
+        return persona;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setPersona(Persona persona) {
+        this.persona = persona;
     }
 
     @Override

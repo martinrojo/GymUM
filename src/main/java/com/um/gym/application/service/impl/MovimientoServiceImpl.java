@@ -1,9 +1,8 @@
 package com.um.gym.application.service.impl;
 
 import com.um.gym.application.models.Movimiento;
-import com.um.gym.application.models.Usuario;
+import com.um.gym.application.models.Persona;
 import com.um.gym.application.repository.MovimientoRepository;
-import com.um.gym.application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
     private MovimientoRepository dao;
 
     @Autowired
-    private UserServiceImpl userService;
+    private PersonaServiceImpl personaService;
 
     @Override
     public Movimiento create(Movimiento entity) {
@@ -47,22 +46,22 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         long minutos = segundos /60;
         segundos -= minutos*60;
 
-        Integer h = (int) (long) horas;
-        Integer m = (int) (long) minutos;
+        Integer h = (int) horas;
+        Integer m = (int) minutos;
 
-        Usuario usuario = userService.findById(entity.getUsuario().getId());
+        Persona persona = personaService.findById(entity.getPersona().getId());
 
 
-        if (usuario.getMinutos() + m >= 60){
-            Integer m2 = (usuario.getMinutos() + m) - 60;
-            usuario.setHoras(usuario.getHoras() + h + 1) ;
-            usuario.setMinutos(m2);
+        if (persona.getMinutos() + m >= 60){
+            Integer m2 = (persona.getMinutos() + m) - 60;
+            persona.setHoras(persona.getHoras() + h + 1) ;
+            persona.setMinutos(m2);
         } else {
-            usuario.setHoras(usuario.getHoras() + h);
-            usuario.setMinutos(usuario.getMinutos() + m);
+            persona.setHoras(persona.getHoras() + h);
+            persona.setMinutos(persona.getMinutos() + m);
         }
 
-        userService.update(usuario);
+        personaService.update(persona);
         return super.update(entity);
     }
 
@@ -82,7 +81,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
     }
 
     public List<Movimiento> findByUsuario(Long id){
-        return dao.findAllByUsuario(userService.findById(id));
+        return dao.findAllByPersona(personaService.findById(id));
     }
 
 
