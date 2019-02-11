@@ -17,6 +17,7 @@ public class JsonMovimientoController {
         JSONArray jsonArray = new JSONArray();
         for (Movimiento movimiento : lista) {
             JSONObject m = new JSONObject();
+            m.put("id", movimiento.getId());
             m.put("usuario", movimiento.getPersona());
             m.put("fecha_entrada", movimiento.getFechaEntrada());
             m.put("fecha_salida", movimiento.getFechaSalida());
@@ -32,6 +33,7 @@ public class JsonMovimientoController {
         JSONArray jsonArray = new JSONArray();
         JSONObject m = new JSONObject();
         JSONObject mainObj = new JSONObject();
+        m.put("id", movimiento.getId());
         m.put("usuario", movimiento.getPersona());
         m.put("fecha_entrada", movimiento.getFechaEntrada());
         m.put("fecha_salida", movimiento.getFechaSalida());
