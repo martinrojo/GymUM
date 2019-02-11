@@ -2,7 +2,6 @@ package com.um.gym.application.controllers;
 
 import com.um.gym.application.models.Movimiento;
 import com.um.gym.application.service.impl.MovimientoServiceImpl;
-import com.um.gym.application.utils.JsonMovimientoController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,6 @@ public class MovimientoController {
     @Autowired
     private MovimientoServiceImpl movimientoServiceImpl;
 
-    @Autowired
-    private JsonMovimientoController jsonMovimientoController;
-
     @GetMapping("/movimientos")
     public ResponseEntity findAll() {
         try {
@@ -27,8 +23,7 @@ public class MovimientoController {
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No hay movimientos.");
             } else {
                 List<Movimiento> lista = movimientoServiceImpl.findAll();
-                String json = jsonMovimientoController.getList(lista);
-                return ResponseEntity.status(HttpStatus.OK).body(json);
+                return ResponseEntity.status(HttpStatus.OK).body(lista);
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -42,8 +37,7 @@ public class MovimientoController {
         }
         try {
             List<Movimiento> lista = movimientoServiceImpl.findByUsuario(id);
-            String json = jsonMovimientoController.getList(lista);
-            return ResponseEntity.status(HttpStatus.OK).body(json);
+            return ResponseEntity.status(HttpStatus.OK).body(lista);
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
