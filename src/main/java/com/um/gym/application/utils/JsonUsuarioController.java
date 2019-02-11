@@ -16,10 +16,13 @@ public class JsonUsuarioController {
         JSONArray jsonArray = new JSONArray();
         for (Persona persona : lista) {
                 JSONObject u = new JSONObject();
+                u.put("id", persona.getId());
                 u.put("nombre", persona.getNombre());
                 u.put("apellido", persona.getApellido());
                 u.put("dni", persona.getDni());
                 u.put("email", persona.getEmail());
+                u.put("horas", persona.getHoras());
+                u.put("minutos", persona.getMinutos());
                 jsonArray.put(u);
             }
         JSONObject mainObj = new JSONObject();
@@ -32,10 +35,13 @@ public class JsonUsuarioController {
         JSONArray jsonArray = new JSONArray();
         JSONObject u = new JSONObject();
         JSONObject mainObj = new JSONObject();
+        u.put("id", persona.getId());
         u.put("nombre", persona.getNombre());
         u.put("apellido", persona.getApellido());
         u.put("dni", persona.getDni());
         u.put("email", persona.getEmail());
+        u.put("horas", persona.getHoras());
+        u.put("minutos", persona.getMinutos());
         jsonArray.put(u);
         mainObj.put("persona", jsonArray);
         logger.info(mainObj.toString());
