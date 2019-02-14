@@ -35,7 +35,7 @@ public class Persona {
 
     @JsonIgnore
     @OneToMany(mappedBy = "persona")
-    private Set<Movimiento> movimientos;
+    private List<Movimiento> movimientos;
 
     public Persona() {
     }
@@ -80,11 +80,11 @@ public class Persona {
         this.email = email;
     }
 
-    public Set<Movimiento> getMovimientos() {
+    public List<Movimiento> getMovimientos() {
         return movimientos;
     }
 
-    public void setMovimientos(Set<Movimiento> movimientos) {
+    public void setMovimientos(List<Movimiento> movimientos) {
         this.movimientos = movimientos;
     }
 

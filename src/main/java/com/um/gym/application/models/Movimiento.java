@@ -73,6 +73,16 @@ public class Movimiento  {
     }
 
     @Override
+    public String toString() {
+        return "Movimiento{" +
+                "id=" + id +
+                ", fechaEntrada=" + fechaEntrada +
+                ", fechaSalida=" + fechaSalida +
+                ", persona=" + persona +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(getId(), getFechaEntrada(), getFechaSalida());
     }

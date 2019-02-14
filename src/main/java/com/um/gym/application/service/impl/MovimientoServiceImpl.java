@@ -84,5 +84,9 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         return dao.findAllByPersona(personaService.findById(id));
     }
 
+    public Movimiento findByIdPersona(Long idPersona){
+        return dao.findByIdPersona(idPersona);
+    }
+
 
 }

@@ -26,18 +26,22 @@ public class PersonaController {
         try {
             if (dni != null) {
                 if (personaService.findAllByDni(dni).isEmpty()) {
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el DNI:" + dni);
+                    logger.warn("GET | No hay usuarios con el DNI: " + dni);
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(false);
                 } else {
                     List<Persona> listaU = personaService.findAllByDni(dni);
+                    logger.info("GET | " + listaU.toString());
                     return ResponseEntity.status(HttpStatus.OK).body(listaU);
                 }
             }
 
             if (nombre != null) {
                 if (personaService.findAllByNombreAndApellido(nombre).isEmpty()) {
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("no hay usuarios con el Nombre o Apellido:" + nombre);
+                    logger.warn("GET | No hay personas con nombre " + nombre);
+                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(false);
                 } else {
                     List<Persona> listaU = personaService.findAllByNombreAndApellido(nombre);
+                    logger.info("GET | " + listaU.toString());
                     return ResponseEntity.status(HttpStatus.OK).body(listaU);
                 }
             }
@@ -80,35 +84,45 @@ public class PersonaController {
     public ResponseEntity create(@RequestBody Persona user) {
         try {
             if (personaService.findByDni(user.getDni()) == null) {
-                return ResponseEntity.ok().body(personaService.create(user));
+                personaService.create(user);
+                logger.info("POST | Persona creado: " + personaService.findById(user.getId()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(true);
             } else {
-                return ResponseEntity.status(HttpStatus.CREATED).body(personaService.create(user));
+                logger.warn("POST | Error. El DNI ingresado ya existe." );
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            logger.error("POST | ERROR: " + e.getMessage() );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
 
     @PutMapping
-    public ResponseEntity insertUser(@RequestBody Persona user) throws JSONException {
+    public ResponseEntity update(@RequestBody Persona user) throws JSONException {
         try {
             if (personaService.findById(user.getId()) != null) {
-                return ResponseEntity.ok().body(personaService.update(user));
+                personaService.update(user);
+                logger.info("PUT | Persona actualizado: " + personaService.findById(user.getId()));
+                return ResponseEntity.ok().body(true);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Persona no existente.");
+                logger.warn("PUT | Persona no existente.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            logger.error("PUT | ERROR: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
 
     @DeleteMapping("/{idUser}")
-    public ResponseEntity deleteUser(@PathVariable("idUser") Long idUser) {
+    public ResponseEntity deleteUser(@PathVariable("idUser") Long id) {
         try {
-            personaService.deleteById(idUser);
-            return ResponseEntity.ok().body("Persona borrado");
+            personaService.deleteById(id);
+            logger.info("DELETE | Persona eliminada." );
+            return ResponseEntity.ok().body(true);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+            logger.error("DELETE | ERROR: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
 }
