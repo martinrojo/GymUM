@@ -17,14 +17,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/personas")
+@RequestMapping("/api")
 public class PersonaController {
     @Autowired
     private PersonaServiceImpl personaService;
 
     private static final Logger logger = LoggerFactory.getLogger(PersonaController.class);
 
-    @GetMapping
+    @GetMapping("/personas")
     public ResponseEntity listUsers(String nombre, String dni) throws JSONException {
         try {
             if (dni != null) {
@@ -60,7 +60,7 @@ public class PersonaController {
         }
     }
 
-    @GetMapping("/{idUser}")
+    @GetMapping("/personas/{idUser}")
     public Persona findUser(@PathVariable("idUser") Long idUser) {
         return personaService.findById(idUser);
     }
@@ -79,7 +79,7 @@ public class PersonaController {
         }/*
     }*/
 
-    @GetMapping("/{idUser}/movimientos")
+    @GetMapping("/personas/{idUser}/movimientos")
     public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
         try {
             return ResponseEntity.ok().body(personaService.findById(idUser).getMovimientos());
@@ -88,7 +88,7 @@ public class PersonaController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/personas")
     public ResponseEntity create(@RequestBody Persona user) {
         try {
             if (personaService.findByDni(user.getDni()) == null) {
@@ -105,7 +105,7 @@ public class PersonaController {
         }
     }
 
-    @PutMapping
+    @PutMapping("/personas")
     public ResponseEntity update(@RequestBody Persona user) throws JSONException {
         try {
             if (personaService.findById(user.getId()) != null) {
@@ -122,7 +122,7 @@ public class PersonaController {
         }
     }
 
-    @DeleteMapping("/{idUser}")
+    @DeleteMapping("/personas/{idUser}")
     public ResponseEntity deleteUser(@PathVariable("idUser") Long id) {
         try {
             personaService.deleteById(id);
@@ -132,18 +132,5 @@ public class PersonaController {
             logger.error("DELETE | ERROR: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
-    }
-
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    public ResponseEntity options(HttpServletResponse response) {
-        logger.info("OPTIONS /api called");
-        response.setHeader("Allow", "HEAD,GET,PUT,DELETE,POST,OPTIONS");
-        final String Options = " GET method (no parameter) returns all users \n" +
-                "GET method (/{idUser}) returns a specific User with ID = idUser \n" +
-                "GET method ({idUser}/movimientos) returns all movements from a specific user with ID = idUser \n" +
-                "POST method (Persona atribute) create a Persona \n" +
-                "PUT method (Persona) update a existing Persona \n" +
-                "DELETE method ({idUser}) delete a user with ID = idUser";
-        return ResponseEntity.status(HttpStatus.OK).body(Options);
     }
 }

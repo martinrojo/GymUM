@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/movimientos")
+@RequestMapping("/api")
 public class MovimientoController {
 
     @Autowired
@@ -25,7 +25,7 @@ public class MovimientoController {
 
     private static final Logger logger = LoggerFactory.getLogger(MovimientoController.class);
 
-    @GetMapping
+    @GetMapping("/movimientos")
     public ResponseEntity findAll() {
         try {
             if (movimientoServiceImpl.findAll().isEmpty()) {
@@ -42,7 +42,7 @@ public class MovimientoController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/movimientos/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
         if (movimientoServiceImpl.findByUsuario(id).isEmpty()) {
             logger.warn("GET | No hay movimientos.");
@@ -58,7 +58,7 @@ public class MovimientoController {
         }
     }
 
-    @GetMapping("/usuarios/{id}")
+    @GetMapping("/movimientos/personas/{id}")
     public ResponseEntity findByPersonaId(@PathVariable Long id) {
         if (movimientoServiceImpl.findByUsuario(id).isEmpty()) {
             logger.warn("GET | No hay movimientos.");
@@ -80,7 +80,7 @@ public class MovimientoController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/movimientos")
     public ResponseEntity create(@RequestBody Movimiento movimiento, BindingResult result) {
         List<Movimiento> movimientos = movimientoServiceImpl.findByUsuario(movimiento.getPersona().getId());
         if (movimientos != null) {
@@ -101,7 +101,7 @@ public class MovimientoController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/movimientos/{id}")
     public ResponseEntity edit(@RequestBody Movimiento movimiento) {
         try {
             movimientoServiceImpl.update(movimiento);
@@ -114,7 +114,7 @@ public class MovimientoController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/movimientos/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         try {
             movimientoServiceImpl.deleteById(id);
