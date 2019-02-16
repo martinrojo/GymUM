@@ -14,6 +14,8 @@ public interface PersonaRepository extends JpaRepository<Persona, Long> {
 
     Persona findByDni(String dni);
 
+    Persona findByEmail(String email);
+
     @Query("SELECT u FROM Persona u WHERE CONCAT(u.nombre, ' ', u.apellido) LIKE CONCAT('%',:name,'%')")
     List<Persona> findAllByNombreAndApellido(@Param("name") String name);
 

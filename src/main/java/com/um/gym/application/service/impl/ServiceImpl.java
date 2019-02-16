@@ -15,7 +15,7 @@ public abstract class ServiceImpl<T, ID extends Serializable> implements Service
     protected JpaRepository<T, ID> dao;
 
     @Override
-    public T create(T entity) {
+    public T create(T entity) throws MyResourceNotFoundException {
         return dao.saveAndFlush(entity);
     }
 
