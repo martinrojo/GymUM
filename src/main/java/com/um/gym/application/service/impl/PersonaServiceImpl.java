@@ -1,5 +1,6 @@
 package com.um.gym.application.service.impl;
 
+import com.um.gym.application.ExceptionHandler.MyResourceNotFoundException;
 import com.um.gym.application.models.Persona;
 import com.um.gym.application.repository.PersonaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,10 @@ public class PersonaServiceImpl extends ServiceImpl<Persona, Long> {
     }
 
     @Override
-    public Persona findById(Long aLong) {
+    public Persona findById(Long aLong) throws RuntimeException {
+        if (!(personaRepository.findById(aLong).isPresent())){
+            throw new MyResourceNotFoundException("User not found with id:"+aLong);
+        }
         return super.findById(aLong);
     }
 

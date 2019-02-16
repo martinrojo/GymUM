@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 
@@ -58,25 +61,30 @@ public class PersonaController {
     }
 
     @GetMapping("/{idUser}")
-    public ResponseEntity findUser(@PathVariable("idUser") Long idUser) throws JSONException {
-        try {
-            if (personaService.findById(idUser).getEmail() == null) {
-                return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Persona no encontrado");
-            } else {
+    public Persona findUser(@PathVariable("idUser") Long idUser) {
+        return personaService.findById(idUser);
+    }
+
+    /*@GetMapping("/{idUser}")
+    public ResponseEntity findUser(@PathVariable("idUser") Long idUser) {
+        //try {
+            /*if (personaService.findById(idUser).getEmail() == null) {
+                throw new ResponseStatusException(HttpStatus.NO_CONTENT, "User Not Found");
+            } else {/*
                 Persona persona = personaService.findById(idUser);
                 return ResponseEntity.status(HttpStatus.OK).body(persona);
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
-    }
+            //}
+      /*  } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "User Not Found", e);
+        }/*
+    }*/
 
     @GetMapping("/{idUser}/movimientos")
     public ResponseEntity insertUser(@PathVariable("idUser") Long idUser) {
         try {
             return ResponseEntity.ok().body(personaService.findById(idUser).getMovimientos());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Movement Not Found", e);
         }
     }
 
@@ -88,12 +96,12 @@ public class PersonaController {
                 logger.info("POST | Persona creado: " + personaService.findById(user.getId()));
                 return ResponseEntity.status(HttpStatus.CREATED).body(true);
             } else {
-                logger.warn("POST | Error. El DNI ingresado ya existe." );
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(false);
+                logger.warn("POST | Error. El DNI ingresado ya existe.");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El DNI ingresado ya existe.");
             }
         } catch (Exception e) {
-            logger.error("POST | ERROR: " + e.getMessage() );
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+            logger.error("POST | ERROR: " + e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Movement Not Found", e);
         }
     }
 
@@ -106,11 +114,11 @@ public class PersonaController {
                 return ResponseEntity.ok().body(true);
             } else {
                 logger.warn("PUT | Persona no existente.");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Persona no existente.");
             }
         } catch (Exception e) {
             logger.error("PUT | ERROR: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Persona no existente.", e);
         }
     }
 
@@ -118,11 +126,24 @@ public class PersonaController {
     public ResponseEntity deleteUser(@PathVariable("idUser") Long id) {
         try {
             personaService.deleteById(id);
-            logger.info("DELETE | Persona eliminada." );
+            logger.info("DELETE | Persona eliminada.");
             return ResponseEntity.ok().body(true);
         } catch (Exception e) {
             logger.error("DELETE | ERROR: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
+    }
+
+    @RequestMapping(method = RequestMethod.OPTIONS)
+    public ResponseEntity options(HttpServletResponse response) {
+        logger.info("OPTIONS /api called");
+        response.setHeader("Allow", "HEAD,GET,PUT,DELETE,POST,OPTIONS");
+        final String Options = " GET method (no parameter) returns all users \n" +
+                "GET method (/{idUser}) returns a specific User with ID = idUser \n" +
+                "GET method ({idUser}/movimientos) returns all movements from a specific user with ID = idUser \n" +
+                "POST method (Persona atribute) create a Persona \n" +
+                "PUT method (Persona) update a existing Persona \n" +
+                "DELETE method ({idUser}) delete a user with ID = idUser";
+        return ResponseEntity.status(HttpStatus.OK).body(Options);
     }
 }

@@ -1,5 +1,6 @@
 package com.um.gym.application.service.impl;
 
+import com.um.gym.application.ExceptionHandler.MyResourceNotFoundException;
 import com.um.gym.application.service.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -36,7 +37,7 @@ public abstract class ServiceImpl<T, ID extends Serializable> implements Service
     }
 
     @Override
-    public T findById(ID id) {
+    public T findById(ID id) throws MyResourceNotFoundException {
         return dao.getOne(id);
     }
 
