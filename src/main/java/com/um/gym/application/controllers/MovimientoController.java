@@ -44,7 +44,7 @@ public class MovimientoController {
 
     @GetMapping("/{id}")
     public ResponseEntity findById(@PathVariable Long id) {
-        if (movimientoServiceImpl.findByUsuario(id).isEmpty()){
+        if (movimientoServiceImpl.findByUsuario(id).isEmpty()) {
             logger.warn("GET | No hay movimientos.");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No hay movimientos.");
         }
@@ -52,7 +52,7 @@ public class MovimientoController {
             List<Movimiento> lista = movimientoServiceImpl.findByUsuario(id);
             logger.info("GET | " + lista.toString());
             return ResponseEntity.status(HttpStatus.OK).body(lista);
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("GET | ERROR: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
@@ -60,21 +60,21 @@ public class MovimientoController {
 
     @GetMapping("/usuarios/{id}")
     public ResponseEntity findByPersonaId(@PathVariable Long id) {
-        if (movimientoServiceImpl.findByUsuario(id).isEmpty()){
+        if (movimientoServiceImpl.findByUsuario(id).isEmpty()) {
             logger.warn("GET | No hay movimientos.");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No hay movimientos.");
         }
         try {
             List<Movimiento> movimientos = personaServiceImpl.findById(id).getMovimientos();
-            for (Movimiento m : movimientos){
-                if (m.getFechaSalida() == null){
+            for (Movimiento m : movimientos) {
+                if (m.getFechaSalida() == null) {
                     logger.info("GET | " + m.toString());
                     return ResponseEntity.status(HttpStatus.OK).body(m);
                 }
             }
             logger.warn("GET | No hay movimiento creado.");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(false);
-        }catch (Exception e) {
+        } catch (Exception e) {
             logger.error("GET | ERROR: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
@@ -102,7 +102,7 @@ public class MovimientoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity edit(@RequestBody Movimiento movimiento){
+    public ResponseEntity edit(@RequestBody Movimiento movimiento) {
         try {
             movimientoServiceImpl.update(movimiento);
             logger.info("PUT | Movimiento actualizado.");
@@ -115,13 +115,13 @@ public class MovimientoController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable Long id){
-       try {
+    public ResponseEntity delete(@PathVariable Long id) {
+        try {
             movimientoServiceImpl.deleteById(id);
-           logger.info("DELETE | Movimiento eliminado.");
+            logger.info("DELETE | Movimiento eliminado.");
             return ResponseEntity.status(HttpStatus.OK).body(true);
-        } catch (Exception e){
-           logger.error("DELETE | ERROR:" + e.getMessage());
+        } catch (Exception e) {
+            logger.error("DELETE | ERROR:" + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(false);
         }
     }
