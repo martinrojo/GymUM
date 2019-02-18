@@ -2,6 +2,7 @@ package com.um.gym.application.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.hateoas.ResourceSupport;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -9,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "movimiento")
-public class Movimiento  {
+public class Movimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
