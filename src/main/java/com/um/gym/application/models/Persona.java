@@ -1,16 +1,22 @@
 package com.um.gym.application.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.um.gym.application.controllers.MovimientoController;
+import com.um.gym.application.controllers.PersonaController;
 import net.bytebuddy.implementation.bind.annotation.Default;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.*;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
+
 @Entity
 @Table(name = "persona")
-public class Persona {
+public class Persona implements Identifiable<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
