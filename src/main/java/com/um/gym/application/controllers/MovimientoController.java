@@ -41,11 +41,11 @@ public class MovimientoController {
     }
 
     @PostMapping("/movimientos")
-    public Movimiento create(@RequestBody Movimiento movimiento, BindingResult result) {
+    public Movimiento create(@RequestBody Movimiento movimiento) {
         return movimientoServiceImpl.create(movimiento);
     }
 
-    @PutMapping("/movimientos/{id}")
+    @PutMapping("/movimientos")
     public Movimiento edit(@RequestBody Movimiento movimiento) {
         return movimientoServiceImpl.update(movimiento);
     }
