@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -38,6 +40,12 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         }
         try {
             logger.info("POST | Movimiento creado.");
+
+            Calendar calendario = GregorianCalendar.getInstance();
+            Date fecha = calendario.getTime();
+            movimiento.setFechaEntrada(fecha);
+            logger.info(movimiento.toString());
+
             return super.create(movimiento);
         } catch (Exception e) {
             logger.error("POST | No hay resultados para esa busqueda.  " + e.getMessage());
@@ -56,9 +64,15 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         }
     }
 
-    @Override
-    public Movimiento update(Movimiento movimiento) {
+
+    public Movimiento update(Long idPersona) {
         try {
+            Movimiento movimiento = findByIdPersona(idPersona);
+            logger.info("GET | " + movimiento.toString());
+            Date fecha = new Date();
+            movimiento.setFechaSalida(fecha);
+            logger.info(movimiento.toString());
+
             Date fechaMenor = movimiento.getFechaEntrada();
             Date fechaMayor = movimiento.getFechaSalida();
 
@@ -92,6 +106,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             logger.info("PUT | Movimiento actualizado.");
             personaService.update(persona);
             return super.update(movimiento);
+
         } catch (Exception e) {
             logger.error("PUT | No hay resultados para esa busqueda.  " + e.getMessage());
             throw new MyResourceNotFoundException("No hay resultados para esa busqueda. " + e.getMessage());
