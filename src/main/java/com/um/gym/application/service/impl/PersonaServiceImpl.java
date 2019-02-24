@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,8 +21,8 @@ public class PersonaServiceImpl extends ServiceImpl<Persona, Long> {
     @Autowired
     private PersonaRepository personaRepository;
 
-    @Override
-    public Persona create(Persona entity) throws RuntimeException {
+
+    public ResponseEntity createPersona(Persona entity) throws RuntimeException {
         try {
             if (!(entity.getDni().length() == 8)){
                 throw new MyResourceNotFoundException("DNI must contains 8 numeric digits");
@@ -39,7 +40,8 @@ public class PersonaServiceImpl extends ServiceImpl<Persona, Long> {
             } else {
                 entity.setHoras(0);
                 entity.setMinutos(0);
-                return super.create(entity);
+                super.create(entity);
+                return ResponseEntity.status(HttpStatus.CREATED).body(findById(entity.getId()));
             }
         }  catch (Exception e) {
             throw new MyResourceNotFoundException("User not created, error: " + e.getMessage());
@@ -51,8 +53,7 @@ public class PersonaServiceImpl extends ServiceImpl<Persona, Long> {
         super.delete(entity);
     }
 
-    @Override
-    public Persona update(Persona entity) throws RuntimeException {
+    public ResponseEntity updatePersona(Persona entity) throws RuntimeException {
         try {
             if (!(entity.getDni().length() == 8)){
                 throw new MyResourceNotFoundException("DNI must contains 8 numeric digits");
@@ -73,7 +74,9 @@ public class PersonaServiceImpl extends ServiceImpl<Persona, Long> {
                 throw new MyResourceNotFoundException("Persona not found");
             } else {
                 logger.info("PUT | Persona actualizado: " + personaRepository.findById(entity.getId()));
-                return super.update(entity);
+                super.update(entity);
+                return ResponseEntity.status(HttpStatus.OK).body(findById(entity.getId()));
+
             }
         } catch (Exception e) {
             throw new MyResourceNotFoundException("Persona not updated, error: " + e.getMessage());
