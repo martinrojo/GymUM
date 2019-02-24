@@ -37,13 +37,13 @@ public class PersonaController {
     }
 
     @PostMapping("/personas")
-    public Persona create(@RequestBody Persona user) {
-        return personaService.create(user);
+    public ResponseEntity create(@RequestBody Persona user) {
+        return personaService.createPersona(user);
     }
 
     @PutMapping("/personas")
-    public Persona update(@RequestBody Persona user) {
-        return personaService.update(user);
+    public ResponseEntity updatePersona(@RequestBody Persona user) {
+        return personaService.updatePersona(user);
     }
 
     @DeleteMapping("/personas/{idUser}")

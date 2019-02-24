@@ -20,9 +20,6 @@ public class MovimientoController {
     @Autowired
     private MovimientoServiceImpl movimientoServiceImpl;
 
-    @Autowired
-    private PersonaServiceImpl personaServiceImpl;
-
     private static final Logger logger = LoggerFactory.getLogger(MovimientoController.class);
 
     @GetMapping("/movimientos")
@@ -41,12 +38,12 @@ public class MovimientoController {
     }
 
     @PostMapping("/movimientos")
-    public Movimiento create(@RequestBody Movimiento movimiento) {
-        return movimientoServiceImpl.create(movimiento);
+    public ResponseEntity create(@RequestBody Movimiento movimiento) {
+        return movimientoServiceImpl.createMovimiento(movimiento);
     }
 
     @PutMapping("/movimientos/{id}")
-    public Movimiento edit(@PathVariable("id") Long id) {
+    public ResponseEntity edit(@PathVariable("id") Long id) {
         return movimientoServiceImpl.update(id);
     }
 

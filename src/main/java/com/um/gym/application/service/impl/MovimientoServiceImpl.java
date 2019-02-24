@@ -29,8 +29,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
     @Autowired
     private PersonaServiceImpl personaService;
 
-    @Override
-    public Movimiento create(Movimiento movimiento) {
+    public ResponseEntity createMovimiento(Movimiento movimiento) {
         List<Movimiento> movimientos = dao.findAllByPersona(movimiento.getPersona());
         if (movimientos != null) {
             for (Movimiento m : movimientos) {
@@ -41,14 +40,14 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             }
         }
         try {
-
             Calendar calendario = Calendar.getInstance();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
             Date date = simpleDateFormat.parse(simpleDateFormat.format(calendario.getTime()));
             movimiento.setFechaEntrada(date);
 
             logger.info("POST | Movimiento creado.");
-            return super.create(movimiento);
+            super.create(movimiento);
+            return ResponseEntity.status(HttpStatus.CREATED).body(findById(movimiento.getId()));
         } catch (Exception e) {
             logger.error("POST | No hay resultados para esa busqueda.  " + e.getMessage());
             throw new MyResourceNotFoundException("No hay resultados para esa busqueda. " + e.getMessage());
@@ -66,8 +65,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         }
     }
 
-
-    public Movimiento update(Long idPersona) {
+    public ResponseEntity update(Long idPersona) {
         try {
             Movimiento movimiento = findByIdPersona(idPersona);
             logger.info("GET | " + movimiento.toString());
@@ -92,12 +90,9 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             //igual que el paso anterior
             long minutos = segundos /60;
             segundos -= minutos*60;
-
             Integer h = (int) horas;
             Integer m = (int) minutos;
-
             Persona persona = personaService.findById(movimiento.getPersona().getId());
-
 
             if (persona.getMinutos() + m >= 60){
                 Integer m2 = (persona.getMinutos() + m) - 60;
@@ -109,7 +104,8 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             }
             logger.info("PUT | Movimiento actualizado.");
             personaService.update(persona);
-            return super.update(movimiento);
+            super.update(movimiento);
+            return ResponseEntity.status(HttpStatus.OK).body(findById(movimiento.getId()));
 
         } catch (Exception e) {
             logger.error("PUT | No hay resultados para esa busqueda.  " + e.getMessage());
