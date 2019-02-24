@@ -45,9 +45,9 @@ public class MovimientoController {
         return movimientoServiceImpl.create(movimiento);
     }
 
-    @PutMapping("/movimientos")
-    public Movimiento edit(@RequestBody Movimiento movimiento) {
-        return movimientoServiceImpl.update(movimiento);
+    @PutMapping("/movimientos/{id}")
+    public Movimiento edit(@PathVariable("id") Long id) {
+        return movimientoServiceImpl.update(id);
     }
 
 

@@ -11,7 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -37,6 +41,12 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             }
         }
         try {
+
+            Calendar calendario = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = simpleDateFormat.parse(simpleDateFormat.format(calendario.getTime()));
+            movimiento.setFechaEntrada(date);
+
             logger.info("POST | Movimiento creado.");
             return super.create(movimiento);
         } catch (Exception e) {
@@ -56,9 +66,17 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         }
     }
 
-    @Override
-    public Movimiento update(Movimiento movimiento) {
+
+    public Movimiento update(Long idPersona) {
         try {
+            Movimiento movimiento = findByIdPersona(idPersona);
+            logger.info("GET | " + movimiento.toString());
+            Calendar calendario = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = simpleDateFormat.parse(simpleDateFormat.format(calendario.getTime()));
+            movimiento.setFechaSalida(date);
+            logger.info(movimiento.toString());
+
             Date fechaMenor = movimiento.getFechaEntrada();
             Date fechaMayor = movimiento.getFechaSalida();
 
@@ -92,6 +110,7 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             logger.info("PUT | Movimiento actualizado.");
             personaService.update(persona);
             return super.update(movimiento);
+
         } catch (Exception e) {
             logger.error("PUT | No hay resultados para esa busqueda.  " + e.getMessage());
             throw new MyResourceNotFoundException("No hay resultados para esa busqueda. " + e.getMessage());
