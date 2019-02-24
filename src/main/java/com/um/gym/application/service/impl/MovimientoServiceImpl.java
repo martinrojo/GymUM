@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -39,13 +41,13 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
             }
         }
         try {
+
+            Calendar calendario = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = simpleDateFormat.parse(simpleDateFormat.format(calendario.getTime()));
+            movimiento.setFechaEntrada(date);
+
             logger.info("POST | Movimiento creado.");
-
-            Calendar calendario = GregorianCalendar.getInstance();
-            Date fecha = calendario.getTime();
-            movimiento.setFechaEntrada(fecha);
-            logger.info(movimiento.toString());
-
             return super.create(movimiento);
         } catch (Exception e) {
             logger.error("POST | No hay resultados para esa busqueda.  " + e.getMessage());
@@ -69,8 +71,10 @@ public class MovimientoServiceImpl extends ServiceImpl<Movimiento, Long> {
         try {
             Movimiento movimiento = findByIdPersona(idPersona);
             logger.info("GET | " + movimiento.toString());
-            Date fecha = new Date();
-            movimiento.setFechaSalida(fecha);
+            Calendar calendario = Calendar.getInstance();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            Date date = simpleDateFormat.parse(simpleDateFormat.format(calendario.getTime()));
+            movimiento.setFechaSalida(date);
             logger.info(movimiento.toString());
 
             Date fechaMenor = movimiento.getFechaEntrada();
